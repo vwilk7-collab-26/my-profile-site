@@ -1,0 +1,465 @@
+{
+  "tasks": [
+    {
+      "id": "e731b466-cce3-49b4-961f-0c67ffa44448",
+      "name": "Phase 1-1: Notion API 환경 설정 및 데이터베이스 구성",
+      "description": "Notion API 키를 발급받고 .env.local 파일을 생성하여 환경변수를 설정합니다. Notion 데이터베이스를 생성하고 필드를 구성한 후 테스트 데이터 5개를 입력합니다. @notionhq/client 패키지 설치 여부를 확인하고, 필요시 설치합니다.",
+      "notes": "API 키 401 에러가 발생하면 Integration이 데이터베이스에 권한이 있는지 확인. 데이터베이스 ID는 Notion URL에서 추출 (32자 16진수 문자열, 대시 제거).",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": ".env.local",
+          "type": "CREATE",
+          "description": "환경변수 파일 (NOTION_API_KEY, NEXT_PUBLIC_NOTION_DATABASE_ID)",
+          "lineStart": 1,
+          "lineEnd": 10
+        },
+        {
+          "path": ".env.example",
+          "type": "REFERENCE",
+          "description": "환경변수 템플릿 (참고용)",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "package.json",
+          "type": "DEPENDENCY",
+          "description": "@notionhq/client 설치 확인",
+          "lineStart": 10,
+          "lineEnd": 40
+        }
+      ],
+      "implementationGuide": "Step 1: Notion Developer 콘솔에서 새 Integration 생성 후 API 키 복사\\nStep 2: .env.local 파일 생성 (또는 .env.example 복사):\\n  NOTION_API_KEY=<api-key>\\n  NEXT_PUBLIC_NOTION_DATABASE_ID=<database-id>\\nStep 3: Notion 데이터베이스 생성 및 필드 추가:\\n  - No (Number): 아이디어 고유 번호\\n  - Title (Title): 아이디어 제목\\n  - Description (Rich Text): 상세 내용\\n  - Category (Select): 프론트엔드, 백엔드, 풀스택, 모바일, 기타\\n  - CreatedAt (Date): 기재 시각\\n  - Status (Select): 아이디어, 진행중, 완료, 보류\\nStep 4: 테스트 데이터 5개 입력 (각 필드 채우기)\\nStep 5: npm install @notionhq/client 확인\\nStep 6: npm run dev로 로컬 실행 후 http://localhost:3000 접속 가능 여부 확인",
+      "verificationCriteria": ".env.local 파일이 정상 로드됨 / Notion 데이터베이스 ID 확인 / 테스트 데이터 5개 이상 입력 / @notionhq/client 패키지 설치 완료 / npm run dev 실행 후 localhost:3000 접속 성공",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "e538ad78-808d-4479-a168-caa14defa5d7",
+      "name": "Phase 2-1: 타입 정의 및 상수 작성",
+      "description": "types/idea.ts 파일에 Notion 데이터와 API 응답을 위한 TypeScript 인터페이스를 정의합니다. constants/categories.ts와 constants/statuses.ts에 카테고리와 상태 상수를 정의하고, lib/date-utils.ts에 날짜 포매팅 함수를 작성합니다.",
+      "notes": "Notion API 응답 구조를 미리 파악하고 IdeaResponse 타입을 정확하게 정의. CATEGORIES와 STATUSES는 각 배지 컴포넌트에서 색상 매핑에 사용됨.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e731b466-cce3-49b4-961f-0c67ffa44448"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "types/idea.ts",
+          "type": "CREATE",
+          "description": "Idea, IdeaResponse 인터페이스 정의",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "constants/categories.ts",
+          "type": "CREATE",
+          "description": "카테고리 상수 정의 (label, color)",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "constants/statuses.ts",
+          "type": "CREATE",
+          "description": "상태 상수 정의 (label, color)",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "lib/date-utils.ts",
+          "type": "CREATE",
+          "description": "날짜 포매팅 함수",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "File 1: types/idea.ts\\n  export interface Idea {\\n    id: string\\n    no: number\\n    title: string\\n    description: string (또는 Rich Text 블록 배열)\\n    category: string\\n    status: string\\n    createdAt: Date\\n    updatedAt?: Date\\n  }\\n  export interface IdeaResponse { /* Notion API 응답 */ }\\n\\nFile 2: constants/categories.ts\\n  export const CATEGORIES = {\\n    frontend: { label: \"프론트엔드\", color: \"bg-blue-100\" },\\n    backend: { label: \"백엔드\", color: \"bg-green-100\" },\\n    ...\\n  }\\n\\nFile 3: constants/statuses.ts\\n  export const STATUSES = {\\n    idea: { label: \"아이디어\", color: \"bg-gray-100\" },\\n    inProgress: { label: \"진행중\", color: \"bg-yellow-100\" },\\n    ...\\n  }\\n\\nFile 4: lib/date-utils.ts\\n  export function formatDate(date: Date): string { /* YYYY-MM-DD */ }\\n  export function formatDateTime(date: Date): string { /* YYYY-MM-DD HH:MM */ }",
+      "verificationCriteria": "types/idea.ts가 생성되고 Idea, IdeaResponse 인터페이스 포함 / constants/categories.ts와 constants/statuses.ts가 생성되고 각각 최소 5개의 상수 정의 / lib/date-utils.ts가 생성되고 formatDate, formatDateTime 함수 포함 / npm run lint 통과 (타입 에러 없음)",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "b288e35c-854e-40d4-a703-efcdc8a829b1",
+      "name": "Phase 2-2: Notion API 클라이언트 구현",
+      "description": "lib/notion.ts 파일에 Notion API 클라이언트를 초기화하고 getAllIdeas(), getIdeaById() 함수를 구현합니다. 모든 함수에 타입을 명시하고 한국어 주석을 작성합니다.",
+      "notes": "Notion API는 페이지 속성(properties)과 블록(blocks)을 별도로 조회해야 함. getAllIdeas()는 No 필드로 오름차순 정렬 필수. getIdeaById()는 Rich Text 렌더링을 위해 blocks 배열도 수집.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e538ad78-808d-4479-a168-caa14defa5d7"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "lib/notion.ts",
+          "type": "CREATE",
+          "description": "Notion API 클라이언트 및 함수 구현",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "types/idea.ts",
+          "type": "DEPENDENCY",
+          "description": "Idea, IdeaResponse 타입 참조",
+          "lineStart": 1,
+          "lineEnd": 50
+        }
+      ],
+      "implementationGuide": "lib/notion.ts 구현:\\n  import { Client } from '@notionhq/client'\\n  const notionClient = new Client({ auth: process.env.NOTION_API_KEY })\\n  const databaseId = process.env.NEXT_PUBLIC_NOTION_DATABASE_ID\\n\\n  export async function getAllIdeas(): Promise<Idea[]> {\\n    // database_id로 쿼리\\n    // sorts: [{ property: \"No\", direction: \"ascending\" }]\\n    // 모든 페이지를 Idea 객체로 변환\\n    // return ideas 배열\\n  }\\n\\n  export async function getIdeaById(pageId: string): Promise<Idea | null> {\\n    // pageId로 페이지 조회\\n    // 페이지 블록 수집 (Rich Text 렌더링용)\\n    // Idea 객체로 변환하여 반환\\n  }\\n  에러 처리: try-catch로 Notion API 오류 처리",
+      "verificationCriteria": "lib/notion.ts가 생성되고 getAllIdeas(), getIdeaById() 함수 포함 / getAllIdeas() 호출 시 Idea[] 배열 반환, No 순으로 정렬됨 / getIdeaById() 호출 시 Idea | null 반환 / 모든 함수에 TypeScript 타입 명시 / 한국어 주석 포함 / npm run lint 통과",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "2d4a9be6-63f0-430c-96db-03aa55a7539e",
+      "name": "Phase 2-3: UI 컴포넌트 개발 (IdeaCard, 배지)",
+      "description": "components/ideas/IdeaCard.tsx, CategoryBadge.tsx, StatusBadge.tsx 컴포넌트를 개발합니다. IdeaCard는 shadcn/ui Card와 Badge를 재사용하고, 배지 컴포넌트는 constants/에서 색상 정보를 가져옵니다.",
+      "notes": "IdeaCard의 Summary는 Description을 100자로 잘라서 표시. 링크는 <Link>로 구현하여 SPA 라우팅. CategoryBadge와 StatusBadge는 재사용 가능하도록 Props로 색상 처리.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e538ad78-808d-4479-a168-caa14defa5d7"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "components/ideas/IdeaCard.tsx",
+          "type": "CREATE",
+          "description": "아이디어 카드 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "components/ideas/CategoryBadge.tsx",
+          "type": "CREATE",
+          "description": "카테고리 배지 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "components/ideas/StatusBadge.tsx",
+          "type": "CREATE",
+          "description": "상태 배지 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "components/ui/badge.tsx",
+          "type": "DEPENDENCY",
+          "description": "shadcn/ui Badge 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "components/ui/card.tsx",
+          "type": "DEPENDENCY",
+          "description": "shadcn/ui Card 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "lib/utils.ts",
+          "type": "DEPENDENCY",
+          "description": "cn() 유틸리티 함수",
+          "lineStart": 1,
+          "lineEnd": 10
+        },
+        {
+          "path": "constants/categories.ts",
+          "type": "DEPENDENCY",
+          "description": "카테고리 상수",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "constants/statuses.ts",
+          "type": "DEPENDENCY",
+          "description": "상태 상수",
+          "lineStart": 1,
+          "lineEnd": 20
+        }
+      ],
+      "implementationGuide": "Component 1: components/ideas/IdeaCard.tsx\\n  interface IdeaCardProps {\\n    id: string\\n    title: string\\n    summary: string (처음 100자)\\n    category: string\\n    status: string\\n    createdAt: Date\\n  }\\n  렌더링: Card > Image (선택사항) + Title + Summary + Category/Status Badge + CreatedAt\\n  클릭 이벤트: <Link href={`/ideas/${id}`}> 또는 onClick 라우팅\\n\\nComponent 2: components/ideas/CategoryBadge.tsx\\n  Props: category: string\\n  constants/categories.ts에서 색상 조회\\n  <Badge className={CATEGORIES[category].color}>{CATEGORIES[category].label}</Badge>\\n\\nComponent 3: components/ideas/StatusBadge.tsx\\n  Props: status: string\\n  constants/statuses.ts에서 색상 조회\\n  <Badge className={STATUSES[status].color}>{STATUSES[status].label}</Badge>\\n\\nスタイリング: cn() 유틸리티로 Tailwind 클래스 조합, 다크 모드 지원 (dark: 접두사)",
+      "verificationCriteria": "components/ideas/*.tsx 파일 3개 생성 / IdeaCard가 Props를 받아 렌더링 가능 / CategoryBadge와 StatusBadge가 constants/에서 색상 조회 / 모든 컴포넌트에 한국어 주석 포함 / npm run lint 통과",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "b888ef6b-b189-4fea-b406-c5145f5d3031",
+      "name": "Phase 3-1: 목록 페이지 구현 (app/page.tsx)",
+      "description": "app/page.tsx를 리팩토링하여 lib/notion.ts의 getAllIdeas() 함수를 호출하고 IdeaCard 컴포넌트를 그리드로 렌더링합니다. 에러 처리, 로딩 상태, 메타데이터를 추가합니다.",
+      "notes": "서버 컴포넌트로 작성하여 getAllIdeas()를 서버에서 호출. 반응형 그리드: 모바일(1열), 태블릿(2열), 데스크톱(3열). 다크/라이트 모드는 기존 theme-provider에서 자동 지원.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b288e35c-854e-40d4-a703-efcdc8a829b1"
+        },
+        {
+          "taskId": "2d4a9be6-63f0-430c-96db-03aa55a7539e"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "목록 페이지 리팩토링",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "lib/notion.ts",
+          "type": "DEPENDENCY",
+          "description": "getAllIdeas() 함수",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "components/ideas/IdeaCard.tsx",
+          "type": "DEPENDENCY",
+          "description": "IdeaCard 컴포넌트",
+          "lineStart": 1,
+          "lineEnd": 50
+        }
+      ],
+      "implementationGuide": "app/page.tsx 리팩토링:\\n  export default async function HomePage() {\\n    try {\\n      const ideas = await getAllIdeas() // No 순 정렬 보장\\n      return (\\n        <div>\\n          <header> {/* navbar는 기존 */}\\n          <main className=\"mx-auto max-w-screen-2xl px-4\">\\n            <h1>아이디어 관리</h1>\\n            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\">\\n              {ideas.map(idea => <IdeaCard key={idea.id} {...idea} />)}\\n            </div>\\n          </main>\\n          <footer> {/* 기존 */}\\n        </div>\\n      )\\n    } catch (error) {\\n      return <div>데이터 로드 중 오류 발생</div>\\n    }\\n  }\\n\\n  export const metadata: Metadata = {\\n    title: \"아이디어 관리 - 바이브코딩\",\\n    description: \"Notion 기반 아이디어 관리 플랫폼\"\\n  }",
+      "verificationCriteria": "app/page.tsx가 getAllIdeas() 호출하고 IdeaCard 그리드 렌더링 / 모든 아이디어가 No 순으로 표시됨 / 각 카드에 제목, 요약, 카테고리, 상태, 생성일시 표시 / 에러 처리 구현 / generateMetadata 포함 / 반응형 레이아웃 (모바일, 태블릿, 데스크톱) / npm run build 성공",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "0f2d19c0-21e4-4c5d-897f-0e243364e864",
+      "name": "Phase 3-2: Rich Text 렌더링 함수 작성 (lib/render-blocks.ts)",
+      "description": "Notion의 Rich Text 블록을 HTML로 변환하는 함수를 lib/render-blocks.ts에 작성합니다. paragraph, heading_1~3, code, list 등 주요 블록 타입을 지원합니다.",
+      "notes": "Notion API 응답 구조를 정확히 파악하고 각 블록 타입별로 처리. Rich Text 어노테이션(bold, italic, 링크)은 모두 지원. 이 함수는 Phase 3-3에서 상세 페이지에서 사용됨.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "e538ad78-808d-4479-a168-caa14defa5d7"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "lib/render-blocks.ts",
+          "type": "CREATE",
+          "description": "Notion 블록을 HTML로 렌더링하는 함수",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "types/idea.ts",
+          "type": "DEPENDENCY",
+          "description": "Block 타입 정의 (필요시)",
+          "lineStart": 1,
+          "lineEnd": 50
+        }
+      ],
+      "implementationGuide": "lib/render-blocks.ts 구현:\\n  export function renderBlocks(blocks: Block[]): JSX.Element {\\n    return blocks.map(block => {\\n      switch (block.type) {\\n        case 'paragraph':\\n          return <p>{renderRichText(block.paragraph.rich_text)}</p>\\n        case 'heading_1':\\n          return <h1>{renderRichText(block.heading_1.rich_text)}</h1>\\n        case 'heading_2':\\n          return <h2>{renderRichText(block.heading_2.rich_text)}</h2>\\n        case 'code':\\n          return <pre><code>{block.code.rich_text[0].plain_text}</code></pre>\\n        case 'bulleted_list_item':\\n          return <li>{renderRichText(block.bulleted_list_item.rich_text)}</li>\\n        // ... 더 많은 타입\\n      }\\n    })\\n  }\\n\\n  function renderRichText(richText: RichText[]): string {\\n    return richText.map(text => {\\n      let result = text.plain_text\\n      if (text.annotations.bold) result = <strong>{result}</strong>\\n      if (text.annotations.italic) result = <em>{result}</em>\\n      if (text.href) result = <a href={text.href}>{result}</a>\\n      return result\\n    })\\n  }",
+      "verificationCriteria": "lib/render-blocks.ts가 생성되고 renderBlocks() 함수 포함 / paragraph, heading_1~3, code, bulleted_list_item 블록 타입 지원 / Rich Text bold, italic, 링크 어노테이션 지원 / 한국어 주석 포함 / npm run lint 통과",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "5ee2c185-c67e-4b61-8746-05cd29555f0a",
+      "name": "Phase 3-3: 상세 페이지 구현 (app/ideas/[id]/page.tsx)",
+      "description": "app/ideas/[id]/page.tsx를 생성하여 단일 아이디어의 상세 페이지를 구현합니다. getIdeaById() 함수로 데이터를 조회하고 renderBlocks()로 Rich Text를 렌더링합니다. generateStaticParams()와 generateMetadata()를 추가합니다.",
+      "notes": "generateStaticParams()로 빌드 시 모든 아이디어 페이지 사전 생성 (정적). generateMetadata()로 동적 메타데이터 설정. 뒤로가기는 <Link href=\"/\"> 또는 useRouter().back() 사용.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b288e35c-854e-40d4-a703-efcdc8a829b1"
+        },
+        {
+          "taskId": "2d4a9be6-63f0-430c-96db-03aa55a7539e"
+        },
+        {
+          "taskId": "0f2d19c0-21e4-4c5d-897f-0e243364e864"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "app/ideas/[id]/page.tsx",
+          "type": "CREATE",
+          "description": "상세 페이지 구현",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "lib/notion.ts",
+          "type": "DEPENDENCY",
+          "description": "getIdeaById() 함수",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "lib/render-blocks.ts",
+          "type": "DEPENDENCY",
+          "description": "renderBlocks() 함수",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "components/ideas/CategoryBadge.tsx",
+          "type": "DEPENDENCY",
+          "description": "카테고리 배지",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "components/ideas/StatusBadge.tsx",
+          "type": "DEPENDENCY",
+          "description": "상태 배지",
+          "lineStart": 1,
+          "lineEnd": 20
+        }
+      ],
+      "implementationGuide": "app/ideas/[id]/page.tsx 구현:\\n  export default async function IdeaPage({ params }: { params: { id: string } }) {\\n    const idea = await getIdeaById(params.id)\\n    if (!idea) return <div>아이디어를 찾을 수 없습니다</div>\\n    return (\\n      <div>\\n        <header> {/* 뒤로가기 버튼 또는 링크 */} </header>\\n        <main className=\"mx-auto max-w-screen-2xl px-4\">\\n          <h1>{idea.title}</h1>\\n          <div className=\"flex gap-4\">\\n            <CategoryBadge category={idea.category} />\\n            <StatusBadge status={idea.status} />\\n          </div>\\n          <div className=\"text-sm text-gray-600\">\\n            {idea.createdAt} | {idea.updatedAt}\\n          </div>\\n          <article className=\"prose dark:prose-invert\">\\n            {renderBlocks(idea.blocks)} {/* Rich Text 렌더링 */}\\n          </article>\\n        </main>\\n      </div>\\n    )\\n  }\\n\\n  export async function generateStaticParams() {\\n    const ideas = await getAllIdeas()\\n    return ideas.map(idea => ({ id: idea.id }))\\n  }\\n\\n  export async function generateMetadata({ params }: { params: { id: string } }) {\\n    const idea = await getIdeaById(params.id)\\n    return { title: idea?.title, description: idea?.summary }\\n  }",
+      "verificationCriteria": "app/ideas/[id]/page.tsx가 생성됨 / getIdeaById() 호출하여 상세 데이터 조회 / renderBlocks()로 Rich Text 렌더링 / generateStaticParams() 포함 (모든 아이디어 페이지 사전 생성) / generateMetadata() 포함 / 카드 클릭 시 상세 페이지로 이동 확인 / 뒤로가기 버튼 기능 / 다크/라이트 모드 지원 / npm run build 성공",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "8b118be8-93d2-439b-a76e-4817e9520ef9",
+      "name": "Phase 3-4: MVP 테스트 및 검증",
+      "description": "Phase 1-3 완료 후 전체 기능을 테스트하고 검증합니다. 로컬 개발 서버 실행, 목록/상세 페이지 렌더링, 링크 동작, 다크/라이트 모드 등을 확인합니다.",
+      "notes": "각 단계에서 발견된 버그는 즉시 수정. 성능 최적화는 Phase 5에서 진행. 모든 검증 항목 통과 후 MVP 완성으로 표시.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b888ef6b-b189-4fea-b406-c5145f5d3031"
+        },
+        {
+          "taskId": "5ee2c185-c67e-4b61-8746-05cd29555f0a"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "DEPENDENCY",
+          "description": "목록 페이지",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "app/ideas/[id]/page.tsx",
+          "type": "DEPENDENCY",
+          "description": "상세 페이지",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "ROADMAP.md",
+          "type": "REFERENCE",
+          "description": "Phase 3 완료 기준 (수동 테스트 체크리스트)",
+          "lineStart": 182,
+          "lineEnd": 195
+        }
+      ],
+      "implementationGuide": "테스트 체크리스트:\\n1. npm run dev 실행 후 localhost:3000 접속\\n2. 목록 페이지 검증:\\n   - 모든 아이디어가 No 순으로 정렬되어 표시됨\\n   - 각 카드에 제목, 요약(100자), 카테고리 배지, 상태 배지, 생성일시 표시\\n   - 로드 시간 3초 이내\\n3. 상세 페이지 검증:\\n   - 카드 클릭 시 /ideas/[id]로 이동\\n   - 제목, 카테고리, 상태, 생성/수정 시각 표시\\n   - Rich Text 블록 올바르게 렌더링 (제목, 단락, 코드, 리스트 등)\\n   - 로드 시간 2초 이내\\n4. 다크/라이트 모드 검증:\\n   - 테마 토글 클릭 시 모드 변경\\n   - 모든 텍스트 가독성 확인\\n5. 반응형 검증:\\n   - 모바일(375px), 태블릿(768px), 데스크톱(1920px) 해상도에서 레이아웃 확인\\n6. 빌드 검증:\\n   - npm run build 성공 (오류 없음)\\n   - npm run lint 통과 (타입 에러 없음)\\n7. 커밋:\\n   - Phase 1, 2, 3 각각 커밋 푸시",
+      "verificationCriteria": "목록 페이지: 모든 아이디어 No 순 표시, 각 카드 완전 렌더링 / 상세 페이지: 클릭 시 이동, Rich Text 올바르게 렌더링 / 다크/라이트 모드: 테마 토글 작동, 가독성 확인 / 반응형: 3가지 해상도에서 레이아웃 정상 / npm run build 성공 / npm run lint 통과 / 모든 커밋 완료",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "f6f18161-4a15-4d6f-9f99-48ed9e321bf8",
+      "name": "Phase 4-1: 필터링 및 검색 기능 (선택)",
+      "description": "카테고리별, 상태별 필터링 UI와 제목/내용 검색 기능을 추가합니다. 쿼리 파라미터 기반으로 필터 상태를 관리합니다. (MVP 이후 선택 작업)",
+      "notes": "Phase 4는 MVP 이후 진행. 필터링은 GET 파라미터로 북마크 가능하게 구현. 검색은 클라이언트 또는 Notion API 필터 중 선택 (성능 기반).",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b888ef6b-b189-4fea-b406-c5145f5d3031"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "필터 UI 추가",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "constants/categories.ts",
+          "type": "DEPENDENCY",
+          "description": "카테고리 상수",
+          "lineStart": 1,
+          "lineEnd": 20
+        }
+      ],
+      "implementationGuide": "필터링 UI: app/page.tsx에 필터 컴포넌트 추가\\n  - 카테고리 Select: constants/categories.ts 기반\\n  - 상태 Select: constants/statuses.ts 기반\\n  - 쿼리 파라미터: ?category=frontend&status=진행중\\n\\n검색 기능:\\n  - 검색 Input 추가\\n  - 클라이언트 사이드: idea.title 또는 idea.description에 포함된 키워드 필터\\n  - 또는 Notion Query Database 필터 활용 (백엔드)\\n\\n상태 관리:\\n  - useRouter().push()로 쿼리 파라미터 업데이트\\n  - URL 기반 필터 상태 복원",
+      "verificationCriteria": "필터 UI 렌더링 / 카테고리별, 상태별 필터링 작동 / 검색 키워드 필터링 작동 / 쿼리 파라미터 URL 변경 / npm run build 성공",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "a67c9ddc-0ec0-4ed0-b756-b0c57f56cd08",
+      "name": "Phase 5-1: ISR 및 성능 최적화 (선택)",
+      "description": "Incremental Static Regeneration (ISR)을 설정하여 정적 페이지를 주기적으로 재생성합니다. 번들 크기 최적화와 Lighthouse 성능 점수를 90 이상으로 올립니다. (MVP 이후 선택 작업)",
+      "notes": "Phase 5는 MVP 완성 후 진행. ISR로 데이터 최신성과 정적 성능의 균형 유지. Lighthouse는 PageSpeed Insights 또는 로컬 도구로 측정.",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "b888ef6b-b189-4fea-b406-c5145f5d3031"
+        },
+        {
+          "taskId": "5ee2c185-c67e-4b61-8746-05cd29555f0a"
+        }
+      ],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": "app/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "ISR 설정 추가",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "app/ideas/[id]/page.tsx",
+          "type": "TO_MODIFY",
+          "description": "ISR on-demand 설정",
+          "lineStart": 1,
+          "lineEnd": 80
+        }
+      ],
+      "implementationGuide": "ISR 설정:\\n  export const revalidate = 600 // 10분마다 재생성\\n\\napp/page.tsx에 추가:\\n  export const revalidate = 600\\n\\napp/ideas/[id]/page.tsx에 추가:\\n  export const revalidate = 'on-demand' // 요청 시 재생성\\n\\n성능 최적화:\\n  - Image 컴포넌트 사용 (next/image)\\n  - dynamic() import로 번들 분할\\n  - Lighthouse 측정: npm run build && npm start\\n  - 성능 점수 90 이상 목표",
+      "verificationCriteria": "ISR revalidate 설정 추가 / 10분 주기로 페이지 재생성 확인 / 번들 크기 측정 및 최적화 / Lighthouse 성능 점수 90 이상",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    },
+    {
+      "id": "bb4dda01-9f9c-4cb7-b532-4a533c31a13f",
+      "name": "Phase 5-2: CI/CD 및 배포 (선택)",
+      "description": "GitHub Actions 워크플로우를 설정하여 푸시/PR 시 자동 테스트 및 빌드를 실행합니다. Vercel에 배포 설정을 구성합니다. (MVP 이후 선택 작업)",
+      "notes": "Phase 5는 MVP 완성 후 진행. GitHub Actions는 린트, 빌드 검증만 포함 (단위 테스트는 선택). Vercel 배포로 프로덕션 환경 구성.",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2026-06-07T02:49:27.147Z",
+      "updatedAt": "2026-06-07T02:49:27.147Z",
+      "relatedFiles": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "type": "CREATE",
+          "description": "GitHub Actions CI/CD 워크플로우",
+          "lineStart": 1,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "GitHub Actions 워크플로우 (.github/workflows/ci.yml):\\n  name: CI/CD\\n  on: [push, pull_request]\\n  jobs:\\n    build:\\n      runs-on: ubuntu-latest\\n      steps:\\n        - uses: actions/checkout@v3\\n        - uses: actions/setup-node@v3\\n          with: { node-version: 18 }\\n        - run: npm ci\\n        - run: npm run lint\\n        - run: npm run build\\n\\nVercel 배포:\\n  - Vercel 대시보드에서 GitHub 레포지토리 연결\\n  - 환경변수 설정 (NOTION_API_KEY, NEXT_PUBLIC_NOTION_DATABASE_ID)\\n  - 자동 배포 활성화",
+      "verificationCriteria": "GitHub Actions 워크플로우 생성 / 푸시 시 자동 린트, 빌드 실행 / PR 체크 통과 / Vercel 배포 설정 완료 / 공개 URL 접근 가능",
+      "analysisResult": "Notion CMS 기반 아이디어 관리 플랫폼 MVP 개발\\n\\n목표: Phase 1-3 순차 개발으로 MVP 완성 (약 6시간)\\n- Phase 1 (0.5h): 프로젝트 골격 - Notion API 환경 설정\\n- Phase 2 (2.5h): 공통 모듈 - lib/notion.ts, types/idea.ts, 컴포넌트 개발\\n- Phase 3 (3h): 핵심 기능 - 목록/상세 페이지 구현\\n\\n기술 스택: Next.js 15, React 19, TypeScript 5, Tailwind CSS v4, Notion API\\n\\n핵심 원칙:\\n1. Phase 순서 엄격 준수 (의존성 관리)\\n2. 단순함 우선 (불필요한 추상화 금지)\\n3. 일관성 유지 (기존 패턴 준수)\\n4. 각 단계 검증 (npm lint, build, 수동 테스트)"
+    }
+  ]
+}
