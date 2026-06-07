@@ -81,3 +81,36 @@ npx shadcn@latest add [component-name]
 - 한국어 라벨(라이트, 다크, 시스템)이 포함된 테마 토글
 - 한국어 설명이 포함된 환경변수
 - 한국어로 작성된 README 및 문서
+
+## Project Context
+
+이 프로젝트는 **Notion CMS 기반 바이브코딩 아이디어 관리 웹 플랫폼**입니다.
+
+### 문서 참고
+
+다음 문서를 반드시 참고하세요:
+
+- **@docs/PRD.md** - 프로젝트 요구사항 및 기능 스펙 (화면 구성, Notion DB 구조, MVP 범위)
+- **@docs/ROADMAP.md** - 개발 로드맵 (Phase 1-5, 각 단계별 할 작업, 예상 시간, 완료 기준)
+
+### 핵심 기능
+
+- Notion API를 통한 아이디어 데이터 관리
+- 아이디어 목록 조회 (No 순 정렬)
+- 아이디어 상세 페이지 (Rich Text 렌더링)
+- 카테고리 및 상태 분류
+
+### 기술 스택 (Notion 연동용)
+
+- **CMS**: Notion API (`@notionhq/client`)
+- **Notion DB 필드**: No, Title, Description, Category, CreatedAt, Status
+
+### 개발 진행
+
+Phase별로 순서대로 진행하세요. (@docs/ROADMAP.md의 Phase 1-5 참고)
+
+1. Phase 1: 프로젝트 골격 (Notion API 설정)
+2. Phase 2: 공통 모듈 (Notion 클라이언트, UI 컴포넌트)
+3. Phase 3: 핵심 기능 (목록/상세 페이지) - MVP 완성
+4. Phase 4: 추가 기능 (필터링, 검색 등)
+5. Phase 5: 최적화 & 배포
